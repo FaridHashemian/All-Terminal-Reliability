@@ -11,11 +11,11 @@ from reliability_comp import reliability
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--seed", type=int, help="seed number")
-    parser.add_argument("--n_graph", type=int, help="number of graphs")
-    parser.add_argument("--n_node", type=int, help="number of nodes")
-    parser.add_argument("--l_bound", type=float, help="edge addition lower bound")
-    parser.add_argument("--u_bound", type=float, help="edge addition upper bound")
+    parser.add_argument("--seed", default=1871, type=int, help="seed number")
+    parser.add_argument("--n_graph", default=10, type=int, help="number of graphs")
+    parser.add_argument("--n_node", default=8, type=int, help="number of nodes")
+    parser.add_argument("--l_bound", default=0.3, type=float, help="edge addition lower bound")
+    parser.add_argument("--u_bound", default=0.6, type=float, help="edge addition upper bound")
     args = parser.parse_args()
     return args
 
