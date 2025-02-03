@@ -11,11 +11,11 @@ from reliability_comp import reliability
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--seed", default=1871, type=int, help="seed number")
-    parser.add_argument("--n_graph", default=10, type=int, help="number of graphs")
-    parser.add_argument("--n_node", default=8, type=int, help="number of nodes")
-    parser.add_argument("--l_bound", default=0.3, type=float, help="edge addition lower bound")
-    parser.add_argument("--u_bound", default=0.6, type=float, help="edge addition upper bound")
+    parser.add_argument("--seed", required=False, default=1871, type=int, help="seed number")
+    parser.add_argument("--n_graph", required=False, default=10, type=int, help="number of graphs")
+    parser.add_argument("--n_node", required=False, default=8, type=int, help="number of nodes")
+    parser.add_argument("--l_bound", required=False, default=0.3, type=float, help="edge addition lower bound")
+    parser.add_argument("--u_bound", required=False, default=0.6, type=float, help="edge addition upper bound")
     args = parser.parse_args()
     return args
 
@@ -68,12 +68,9 @@ def multi_process(dataset):
 
     with multiprocessing.Pool(processes=32) as pool:
         results = pool.starmap(reliability, args)
-    return None
+    return results
 
 if __name__ == "__main__":
     args = get_args()
     dataset = create_graph(args)
-    multi_process(dataset)
-
-    print('Done')
-    
+    print(multi_process(dataset))
