@@ -74,3 +74,6 @@ if __name__ == "__main__":
     args = get_args()
     dataset = create_graph(args)
     multi_process(dataset)
+
+    print('Done')
+    
