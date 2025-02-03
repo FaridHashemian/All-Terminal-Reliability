@@ -1,0 +1,3 @@
+[submodule "reliability_tdzdd"]
+	path = reliability_tdzdd
+	url = https://github.com/junkawahara/reliability_tdzdd.git
