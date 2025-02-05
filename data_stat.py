@@ -19,7 +19,7 @@ f.close()
 df = pd.read_csv('save_files/all_data.csv', delimiter=';', header=None)
 
 if not os.path.exists('plots'):
-    os.makedir('plots')
+    os.mkdir('plots')
 
 # Get unique values of the fourth column
 unique_values = df[3].unique()
