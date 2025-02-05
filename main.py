@@ -66,12 +66,12 @@ def comp_process(dataset, args):
     #os.chdir(os.path.expanduser('~'))
     os.chdir(args.path)
     #results = []
-    with open ('../results_{}.csv'.format(args.n_node), 'w') as f:
+    with open ('../save_files/results_{}.csv'.format(args.n_node), 'w') as f:
         
         for i, t in zip(dataset, range(len(dataset))):
             rel, time = reliability_comp_fbs(i, t, args.n_node)
             #results.append()
-            f.write('{},{},{}\n'.format(nx.to_dict_of_dicts(i), rel, time))
+            f.write('{};{};{}\n'.format(nx.to_dict_of_dicts(i), rel, time))
 
     f.close()
 
