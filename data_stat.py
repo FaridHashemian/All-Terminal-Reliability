@@ -43,6 +43,7 @@ plt.tight_layout()
 #plt.show()
 plt.savefig('plots/histograms.png')
 
+plt.clf()
 
 plt.hist(df[1], bins=10, alpha=0.7)
 plt.title('Histogram for all node sizes')
