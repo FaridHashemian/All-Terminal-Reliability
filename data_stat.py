@@ -8,7 +8,7 @@ data_files = os.listdir('save_files')
 
 
 with open('save_files/all_data.csv', 'w') as f:
-    for i in range(6, 21):
+    for i in range(6, 31):
         with open('save_files/results_{}.csv'.format(i), 'r') as g:
             for line in g.readlines():
                 f.write('{};{}\n'.format(line.strip(), i))
@@ -25,7 +25,7 @@ if not os.path.exists('plots'):
 unique_values = df[3].unique()
 
 # Create subplots
-fig, axes = plt.subplots(nrows=5, ncols=3, figsize=(10, 20))
+fig, axes = plt.subplots(nrows=5, ncols=5, figsize=(10, 20))
 
 # Flatten the axes array
 axes = axes.flatten()

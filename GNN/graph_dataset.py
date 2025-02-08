@@ -1,12 +1,18 @@
 import torch
 import pandas as pd
-import tqdm
+from tqdm import tqdm
 from torch_geometric.data import Data, Dataset
 import os
 import numpy as np
 import networkx as nx
 import ast
 import shutil
+import random
+import io
+import copy
+
+
+#os.chdir('GNN/data')
 
 class GraphDataset(Dataset):
 
@@ -184,3 +190,75 @@ class GraphDataset(Dataset):
         data = torch.load(os.path.join(self.processed_dir,
                                  f'data_{idx}.pt'))
     return data
+  
+
+
+def split_data(args) -> GraphDataset:
+    train_dataset = None
+    valid_dataset = None
+    test_dataset = None
+    random.seed(args.seed)
+    train_portion = args.train_portion
+    valid_portion = args.valid_portion
+    train_idx = {}
+    valid_idx = {}
+    test_idx = {}
+    os.chdir(os.path.expanduser('~')+args.path)
+    for file_name in os.listdir('.'):
+        train_idx[file_name] = []
+        valid_idx[file_name] = []
+        test_idx[file_name] = []
+        if file_name.endswith('.csv'):
+            data = GraphDataset('{}/'.format(file_name.strip('.csv')), file_name)
+            dataset_len = len(data)
+            idx = [i for i in range(dataset_len)]
+            random.shuffle(idx)
+            for i in range(len(idx)):
+                if i < int(dataset_len*train_portion):
+                    train_idx[file_name].append(idx[i])
+                elif i < int(dataset_len*(train_portion+valid_portion)):
+                    valid_idx[file_name].append(idx[i])
+                else:
+                    test_idx[file_name].append(idx[i])
+            if type(train_dataset) == type(None):
+                train_dataset = data[train_idx[file_name]]
+                valid_dataset = data[valid_idx[file_name]]
+                test_dataset = data[test_idx[file_name]]
+            else:
+                
+                train_dataset += data[train_idx[file_name]]
+                valid_dataset += data[valid_idx[file_name]]
+                test_dataset += data[test_idx[file_name]]
+
+    return train_dataset, valid_dataset, test_dataset
+
+
+
+
+class EarlyStopping():
+  def __init__(self, patience=5, min_delta=0, restore_best_weights=True):
+    self.patience = patience
+    self.min_delta = min_delta
+    self.restore_best_weights = restore_best_weights
+    self.best_model = None
+    self.best_loss = None
+    self.counter = 0
+    self.status = ""
+
+  def __call__(self, model, val_loss):
+    if self.best_loss == None:
+      self.best_loss = val_loss
+      self.best_model = copy.deepcopy(model)
+    elif self.best_loss - val_loss > self.min_delta:
+      self.best_loss = val_loss
+      self.counter = 0
+      self.best_model.load_state_dict(model.state_dict())
+    elif self.best_loss - val_loss < self.min_delta:
+      self.counter += 1
+      if self.counter >= self.patience:
+        self.status = f"Stopped on {self.counter}"
+        if self.restore_best_weights:
+          model.load_state_dict(self.best_model.state_dict())
+        return True
+    self.status = f"{self.counter}/{self.patience}"
+    return False
