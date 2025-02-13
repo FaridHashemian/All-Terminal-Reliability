@@ -205,10 +205,10 @@ def split_data(args) -> GraphDataset:
     test_idx = {}
     os.chdir(os.path.expanduser('~')+args.path)
     for file_name in os.listdir('.'):
-        train_idx[file_name] = []
-        valid_idx[file_name] = []
-        test_idx[file_name] = []
         if file_name.endswith('.csv'):
+            train_idx[file_name] = []
+            valid_idx[file_name] = []
+            test_idx[file_name] = []
             data = GraphDataset('{}/'.format(file_name.strip('.csv')), file_name)
             dataset_len = len(data)
             idx = [i for i in range(dataset_len)]

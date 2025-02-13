@@ -32,6 +32,14 @@ def get_args():
     parser.add_argument("--path", default='/Downloads/All-Terminal-Reliability/GNN/data/', type=str, help="path to the data folder")
     parser.add_argument("--train_portion", default=0.75, type=float, help="train proportion")
     parser.add_argument("--valid_portion", default=0.15, type=float, help="validation proportion")
+    parser.add_argument("--n_embed", default=128, type=int, help="node embedding size")
+    parser.add_argument("--e_embed", default=128, type=int, help="edge embedding size")
+    parser.add_argument("--aggs", nargs='+' , help = "choose between different aggregators: sum, mean, min, max, var and std")
+    parser.add_argument("--scalers", nargs='+' , help = "choose between different scalers: identity, amplification, attenuation, linear and inverse_linear")
+    parser.add_argument("--n_pna", default=4, type = int, help="number of PNA convolutions in the model")
+    parser.add_argument("--hidden", default=128, type = int, help="hidden layer neuron size")
+    parser.add_argument("--n_mlp_layer", default=2, type = int, help="mlp model hidden layer")
+    parser.add_argument("--af", default='relu', type = str, help="choose activation function from a list of relu, elu, silu, and tanh")
     parser.add_argument("--batch_size", default=64, type = int, help="batch size")
     parser.add_argument("--lr", default=0.001, type=float, help="learning rate")
     parser.add_argument("--weight_decay", default=0.1, type=float, help="weight decay for optimizer")
@@ -90,7 +98,7 @@ def train_model(args):
     test_loader = DataLoader(valid_data, batch_size=args.batch_size, shuffle=True)
     valid_loader = DataLoader(test_data, batch_size=args.batch_size, shuffle=True)
 
-    model = PNA_Net(train_data)
+    model = PNA_Net(args,train_data)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay= args.weight_decay)
     criterion = torch.nn.MSELoss(reduction = 'sum')

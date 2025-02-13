@@ -1,0 +1,70 @@
+#!/bin/bash
+#SBATCH --job-name=gnn_model_job            # Job name
+#SBATCH --output=gnn_model_%j.txt       # Standard output and error log
+#SBATCH --partition qgpu72 
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=sfhashem@uark.edu
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=3                   # Number of tasks
+#SBATCH --time=72:00:00                       # Time limit (HH:MM:SS)
+#SBATCH --mem=100M                            # Memory limit
+
+# Purge all the previous packages
+module purge
+
+# Load the necessary modules (if applicable)
+module load python/anaconda-3.14
+
+ulimit -n 2048
+
+# Run the Python program
+python main.py --n_embed 256 --e_embed 256 --aggs mean std --scalers amplification attenuation --n_pna 4 --hidden 512 --n_mlp_layer 4 --af silu --batch_size 128 --lr 1e-05 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.001 --epochs 400 
+python main.py --n_embed 128 --e_embed 256 --aggs sum min max --scalers identity amplification attenuation --n_pna 5 --hidden 256 --n_mlp_layer 5 --af silu --batch_size 64 --lr 0.0001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.0001 --epochs 400 
+python main.py --n_embed 256 --e_embed 128 --aggs mean min max std --scalers attenuation linear inverse_linear --n_pna 5 --hidden 256 --n_mlp_layer 4 --af tanh --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 600 
+python main.py --n_embed 64 --e_embed 256 --aggs sum min max --scalers identity amplification attenuation --n_pna 2 --hidden 512 --n_mlp_layer 3 --af silu --batch_size 128 --lr 1e-05 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.0001 --epochs 600 
+python main.py --n_embed 256 --e_embed 64 --aggs sum mean std --scalers identity amplification attenuation --n_pna 4 --hidden 128 --n_mlp_layer 5 --af relu --batch_size 32 --lr 1e-05 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.001 --epochs 200 
+python main.py --n_embed 64 --e_embed 64 --aggs mean std --scalers identity linear inverse_linear --n_pna 3 --hidden 256 --n_mlp_layer 2 --af elu --batch_size 128 --lr 0.0001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0 --epochs 400 
+python main.py --n_embed 128 --e_embed 64 --aggs mean std --scalers identity amplification attenuation linear --n_pna 3 --hidden 64 --n_mlp_layer 2 --af relu --batch_size 32 --lr 1e-05 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0.0001 --epochs 400 
+python main.py --n_embed 128 --e_embed 128 --aggs sum mean std --scalers identity linear inverse_linear --n_pna 5 --hidden 256 --n_mlp_layer 4 --af relu --batch_size 64 --lr 0.0001 --weight_decay 0.0001 --es_episodes 20 --es_improvement 0.001 --epochs 600 
+python main.py --n_embed 256 --e_embed 256 --aggs sum mean std --scalers attenuation linear inverse_linear --n_pna 4 --hidden 128 --n_mlp_layer 3 --af silu --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0 --epochs 200 
+python main.py --n_embed 64 --e_embed 64 --aggs sum mean min max var std --scalers amplification attenuation linear inverse_linear --n_pna 5 --hidden 256 --n_mlp_layer 5 --af silu --batch_size 32 --lr 0.001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0 --epochs 400 
+python main.py --n_embed 256 --e_embed 128 --aggs mean min max std --scalers identity linear inverse_linear --n_pna 2 --hidden 128 --n_mlp_layer 4 --af relu --batch_size 64 --lr 0.001 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 64 --e_embed 64 --aggs mean std --scalers identity linear inverse_linear --n_pna 5 --hidden 64 --n_mlp_layer 2 --af silu --batch_size 32 --lr 0.001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.0001 --epochs 200 
+# python main.py --n_embed 64 --e_embed 256 --aggs sum mean min max std --scalers amplification attenuation --n_pna 5 --hidden 512 --n_mlp_layer 2 --af tanh --batch_size 32 --lr 1e-05 --weight_decay 0.0001 --es_episodes 50 --es_improvement 0.001 --epochs 400 
+# python main.py --n_embed 256 --e_embed 128 --aggs sum mean min max var std --scalers amplification attenuation --n_pna 2 --hidden 256 --n_mlp_layer 2 --af relu --batch_size 64 --lr 1e-05 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0.0001 --epochs 400 
+# python main.py --n_embed 64 --e_embed 64 --aggs mean std --scalers identity linear inverse_linear --n_pna 3 --hidden 128 --n_mlp_layer 4 --af relu --batch_size 64 --lr 0.001 --weight_decay 0.0001 --es_episodes 50 --es_improvement 0.001 --epochs 400 
+# python main.py --n_embed 256 --e_embed 256 --aggs sum mean min max var std --scalers identity amplification attenuation linear inverse_linear --n_pna 2 --hidden 64 --n_mlp_layer 2 --af silu --batch_size 64 --lr 0.0001 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 128 --e_embed 128 --aggs sum min max --scalers identity amplification attenuation linear --n_pna 2 --hidden 128 --n_mlp_layer 3 --af silu --batch_size 64 --lr 0.0001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.0001 --epochs 600 
+# python main.py --n_embed 128 --e_embed 256 --aggs mean min max std --scalers amplification attenuation --n_pna 3 --hidden 128 --n_mlp_layer 5 --af silu --batch_size 128 --lr 1e-05 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0.0001 --epochs 600 
+# python main.py --n_embed 128 --e_embed 128 --aggs sum mean min max std --scalers identity linear --n_pna 4 --hidden 64 --n_mlp_layer 4 --af relu --batch_size 128 --lr 0.0001 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0.001 --epochs 600 
+# python main.py --n_embed 256 --e_embed 256 --aggs sum min max --scalers amplification attenuation --n_pna 3 --hidden 64 --n_mlp_layer 3 --af silu --batch_size 128 --lr 0.0001 --weight_decay 0.0001 --es_episodes 50 --es_improvement 0 --epochs 600 
+# python main.py --n_embed 128 --e_embed 256 --aggs sum mean std --scalers amplification attenuation linear inverse_linear --n_pna 3 --hidden 64 --n_mlp_layer 5 --af tanh --batch_size 64 --lr 0.001 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 256 --e_embed 64 --aggs sum mean min max std --scalers amplification attenuation --n_pna 3 --hidden 64 --n_mlp_layer 4 --af tanh --batch_size 64 --lr 0.001 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0.0001 --epochs 600 
+# python main.py --n_embed 64 --e_embed 64 --aggs sum mean std --scalers attenuation linear inverse_linear --n_pna 2 --hidden 128 --n_mlp_layer 5 --af relu --batch_size 32 --lr 0.001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 128 --e_embed 128 --aggs sum min max --scalers identity amplification attenuation --n_pna 5 --hidden 512 --n_mlp_layer 3 --af relu --batch_size 64 --lr 0.0001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 64 --e_embed 128 --aggs mean std --scalers identity amplification attenuation linear --n_pna 2 --hidden 256 --n_mlp_layer 4 --af silu --batch_size 32 --lr 1e-05 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 64 --e_embed 64 --aggs mean min max std --scalers identity amplification attenuation linear inverse_linear --n_pna 3 --hidden 256 --n_mlp_layer 3 --af relu --batch_size 128 --lr 0.0001 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0.0001 --epochs 200 
+# python main.py --n_embed 128 --e_embed 256 --aggs mean std --scalers identity linear --n_pna 2 --hidden 256 --n_mlp_layer 2 --af silu --batch_size 128 --lr 1e-05 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 128 --e_embed 128 --aggs mean min max std --scalers amplification attenuation --n_pna 4 --hidden 512 --n_mlp_layer 3 --af relu --batch_size 128 --lr 0.0001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0 --epochs 600 
+# python main.py --n_embed 128 --e_embed 64 --aggs mean min max std --scalers identity amplification attenuation --n_pna 5 --hidden 512 --n_mlp_layer 5 --af relu --batch_size 64 --lr 0.001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 128 --e_embed 128 --aggs sum mean min max var std --scalers identity amplification attenuation linear inverse_linear --n_pna 3 --hidden 64 --n_mlp_layer 5 --af silu --batch_size 32 --lr 1e-05 --weight_decay 0.0001 --es_episodes 20 --es_improvement 0.001 --epochs 600 
+# python main.py --n_embed 256 --e_embed 256 --aggs sum mean min max std --scalers attenuation linear inverse_linear --n_pna 5 --hidden 512 --n_mlp_layer 3 --af tanh --batch_size 32 --lr 0.0001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 400 
+# python main.py --n_embed 256 --e_embed 64 --aggs sum mean min max var std --scalers identity amplification attenuation --n_pna 3 --hidden 64 --n_mlp_layer 3 --af elu --batch_size 32 --lr 0.001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.001 --epochs 400 
+# python main.py --n_embed 128 --e_embed 256 --aggs mean std --scalers identity amplification attenuation linear --n_pna 4 --hidden 64 --n_mlp_layer 5 --af silu --batch_size 128 --lr 0.0001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 256 --e_embed 128 --aggs sum mean min max std --scalers amplification attenuation --n_pna 4 --hidden 64 --n_mlp_layer 3 --af tanh --batch_size 128 --lr 0.001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.0001 --epochs 600 
+# python main.py --n_embed 256 --e_embed 256 --aggs mean min max std --scalers identity linear --n_pna 5 --hidden 64 --n_mlp_layer 4 --af silu --batch_size 128 --lr 1e-05 --weight_decay 0.0001 --es_episodes 50 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 128 --e_embed 64 --aggs mean min max std --scalers amplification attenuation --n_pna 3 --hidden 64 --n_mlp_layer 4 --af elu --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.0001 --epochs 400 
+# python main.py --n_embed 256 --e_embed 256 --aggs mean min max std --scalers identity amplification attenuation --n_pna 4 --hidden 512 --n_mlp_layer 4 --af relu --batch_size 32 --lr 1e-05 --weight_decay 0.0001 --es_episodes 70 --es_improvement 0.001 --epochs 600 
+# python main.py --n_embed 128 --e_embed 64 --aggs mean std --scalers attenuation linear inverse_linear --n_pna 4 --hidden 128 --n_mlp_layer 3 --af tanh --batch_size 128 --lr 0.0001 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 400 
+# python main.py --n_embed 128 --e_embed 128 --aggs sum mean min max var std --scalers identity linear --n_pna 5 --hidden 64 --n_mlp_layer 2 --af elu --batch_size 64 --lr 0.0001 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0.0001 --epochs 600 
+# python main.py --n_embed 256 --e_embed 256 --aggs mean std --scalers identity amplification attenuation linear --n_pna 2 --hidden 512 --n_mlp_layer 4 --af relu --batch_size 128 --lr 0.001 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.0001 --epochs 400 
+# python main.py --n_embed 128 --e_embed 128 --aggs mean min max std --scalers amplification attenuation --n_pna 5 --hidden 512 --n_mlp_layer 5 --af elu --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 256 --e_embed 128 --aggs mean min max std --scalers amplification attenuation linear inverse_linear --n_pna 2 --hidden 64 --n_mlp_layer 3 --af relu --batch_size 32 --lr 1e-05 --weight_decay 0.0001 --es_episodes 50 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 64 --e_embed 256 --aggs sum min max --scalers amplification attenuation --n_pna 2 --hidden 128 --n_mlp_layer 3 --af elu --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 128 --e_embed 64 --aggs sum mean min max var std --scalers identity amplification attenuation --n_pna 3 --hidden 512 --n_mlp_layer 5 --af relu --batch_size 128 --lr 0.001 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 256 --e_embed 64 --aggs sum mean std --scalers identity amplification attenuation --n_pna 4 --hidden 256 --n_mlp_layer 2 --af tanh --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0 --epochs 200 
+# python main.py --n_embed 128 --e_embed 256 --aggs sum min max --scalers attenuation linear inverse_linear --n_pna 5 --hidden 512 --n_mlp_layer 4 --af relu --batch_size 64 --lr 0.001 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0.001 --epochs 200 
+# python main.py --n_embed 128 --e_embed 128 --aggs sum mean std --scalers identity amplification attenuation linear --n_pna 3 --hidden 512 --n_mlp_layer 4 --af silu --batch_size 32 --lr 1e-05 --weight_decay 1e-06 --es_episodes 20 --es_improvement 0.001 --epochs 600 
+# python main.py --n_embed 256 --e_embed 64 --aggs mean min max std --scalers identity amplification attenuation linear inverse_linear --n_pna 2 --hidden 64 --n_mlp_layer 5 --af relu --batch_size 64 --lr 1e-05 --weight_decay 1e-06 --es_episodes 70 --es_improvement 0.001 --epochs 600 
+# python main.py --n_embed 64 --e_embed 256 --aggs sum mean min max var std --scalers amplification attenuation --n_pna 2 --hidden 512 --n_mlp_layer 5 --af elu --batch_size 32 --lr 0.001 --weight_decay 1e-06 --es_episodes 50 --es_improvement 0 --epochs 400 
+# python main.py --n_embed 256 --e_embed 64 --aggs sum mean min max var std --scalers attenuation linear inverse_linear --n_pna 2 --hidden 512 --n_mlp_layer 2 --af elu --batch_size 128 --lr 1e-05 --weight_decay 0.0001 --es_episodes 20 --es_improvement 0.001 --epochs 200 
