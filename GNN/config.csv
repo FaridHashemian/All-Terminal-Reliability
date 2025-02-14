@@ -1,0 +1,51 @@
+0,1,2,3,4,5,6,7,8,9,10,11,12,13
+256,256,mean min max std,amplification attenuation,5,64,4,silu,32,0.0001,1e-05,70,0,200
+128,512,sum min max,identity amplification attenuation,5,128,5,elu,64,1e-05,1e-06,50,0.001,600
+256,256,mean min max std,identity linear inverse_linear,4,256,3,relu,64,0.0001,1e-06,20,0.0001,400
+512,256,sum min max,identity linear inverse_linear,2,256,2,relu,128,1e-05,0.0001,70,0,400
+256,128,sum mean min max std,identity amplification attenuation linear inverse_linear,2,64,5,elu,128,0.001,1e-05,50,0.001,200
+256,512,sum min max,attenuation linear inverse_linear,2,128,4,silu,128,0.001,1e-06,50,0.001,400
+128,128,mean std,identity linear,3,512,3,silu,128,1e-05,1e-05,70,0.0001,200
+512,256,sum min max,identity linear,5,256,4,relu,64,0.001,1e-05,50,0.001,600
+256,512,mean min max std,amplification attenuation,3,128,5,tanh,64,0.0001,0.0001,70,0,200
+128,256,mean std,identity amplification attenuation linear,2,512,5,silu,64,0.001,1e-06,70,0.0001,600
+128,256,sum mean min max std,identity amplification attenuation,4,512,3,silu,32,0.001,0.0001,20,0.0001,600
+128,128,mean min max std,amplification attenuation linear inverse_linear,2,256,2,silu,64,0.0001,1e-06,20,0.001,600
+512,512,sum mean min max std,identity linear inverse_linear,2,256,4,elu,128,1e-05,1e-06,20,0,600
+512,256,sum mean min max std,identity amplification attenuation linear,2,64,4,silu,64,0.0001,0.0001,20,0,600
+128,512,sum mean min max var std,amplification attenuation linear inverse_linear,4,128,3,tanh,128,1e-05,1e-05,70,0.0001,200
+256,256,mean std,identity amplification attenuation linear,3,256,3,silu,32,0.0001,1e-06,20,0.001,200
+256,256,sum mean min max var std,identity amplification attenuation linear inverse_linear,2,512,4,relu,128,0.0001,0.0001,50,0.0001,200
+128,512,sum mean min max std,amplification attenuation,4,512,2,tanh,128,0.001,1e-05,20,0.001,600
+512,128,mean min max std,identity amplification attenuation linear inverse_linear,5,256,4,elu,32,1e-05,1e-06,50,0.001,400
+512,128,sum mean std,identity amplification attenuation,5,512,3,silu,32,1e-05,1e-06,50,0,600
+512,256,mean std,attenuation linear inverse_linear,5,256,4,elu,32,0.001,0.0001,70,0,200
+512,512,sum mean min max var std,amplification attenuation,2,64,5,elu,64,1e-05,0.0001,70,0,400
+512,128,mean std,identity linear inverse_linear,5,256,5,relu,32,0.001,1e-05,50,0.0001,200
+512,128,sum mean std,amplification attenuation,4,256,4,tanh,32,0.001,1e-06,70,0.0001,400
+512,512,sum min max,identity amplification attenuation linear inverse_linear,4,64,5,tanh,32,1e-05,1e-05,20,0.0001,600
+256,128,sum mean min max std,identity amplification attenuation,3,128,4,tanh,128,0.001,1e-06,70,0,200
+256,128,sum mean min max var std,amplification attenuation linear inverse_linear,4,128,4,silu,32,1e-05,0.0001,50,0,400
+256,128,sum mean std,amplification attenuation linear inverse_linear,3,128,3,tanh,128,0.0001,0.0001,20,0.001,600
+256,512,sum mean min max std,identity amplification attenuation linear,2,512,2,silu,32,0.001,1e-05,70,0.0001,600
+256,128,sum mean std,identity linear,4,512,4,relu,32,0.0001,0.0001,70,0.001,400
+128,128,sum min max,identity amplification attenuation,3,64,3,elu,32,0.0001,0.0001,20,0.0001,400
+512,128,mean min max std,identity amplification attenuation linear inverse_linear,2,128,5,tanh,64,0.0001,0.0001,50,0,600
+512,512,mean std,amplification attenuation,4,128,2,relu,64,1e-05,1e-06,50,0,400
+256,512,mean min max std,identity amplification attenuation linear,4,128,2,relu,128,1e-05,0.0001,50,0.0001,400
+256,256,sum mean std,identity amplification attenuation,3,64,5,tanh,128,0.0001,1e-05,70,0.001,400
+256,128,sum mean min max var std,identity linear inverse_linear,4,512,5,relu,128,0.001,1e-05,20,0.0001,600
+128,256,sum mean min max var std,attenuation linear inverse_linear,5,256,5,tanh,64,0.001,0.0001,50,0.0001,400
+512,256,mean min max std,attenuation linear inverse_linear,3,512,5,elu,128,0.0001,1e-06,70,0,200
+128,256,mean std,identity amplification attenuation linear inverse_linear,3,256,2,elu,64,0.001,1e-06,50,0.001,400
+256,128,sum mean min max var std,identity amplification attenuation,4,64,3,tanh,32,0.001,1e-05,50,0,400
+128,256,sum mean std,identity amplification attenuation linear,5,512,2,elu,128,1e-05,1e-06,20,0.001,200
+128,512,sum min max,identity linear,3,64,3,elu,64,1e-05,0.0001,20,0,400
+512,512,sum mean min max var std,amplification attenuation linear inverse_linear,3,64,2,tanh,64,0.0001,1e-05,70,0.0001,200
+128,512,sum mean min max var std,identity linear inverse_linear,3,64,2,elu,32,0.001,0.0001,70,0.001,200
+256,128,sum mean std,amplification attenuation linear inverse_linear,3,128,2,tanh,32,1e-05,1e-05,50,0.0001,600
+128,256,sum mean min max std,identity linear,5,128,5,relu,128,0.0001,1e-06,20,0.0001,200
+128,512,sum mean min max std,attenuation linear inverse_linear,5,512,2,silu,128,1e-05,0.0001,50,0.001,600
+512,256,sum mean std,identity amplification attenuation linear,5,64,3,relu,32,1e-05,1e-05,20,0.001,200
+128,512,sum min max,identity linear,2,128,3,relu,64,0.0001,1e-05,20,0,400
+512,128,mean min max std,amplification attenuation,5,256,3,relu,64,0.0001,1e-05,70,0.001,600
