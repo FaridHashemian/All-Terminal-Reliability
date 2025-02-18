@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import multiprocessing
 import argparse
-from reliability_comp import reliability_comp_fbs
+from reliability_comp import reliability_comp_fbs, reliability_comp_mc
 
 
 def get_args():
@@ -15,10 +15,12 @@ def get_args():
     parser.add_argument("--l_bound", default=0.3, type=float, help="edge addition lower bound")
     parser.add_argument("--u_bound", default=0.6, type=float, help="edge addition upper bound")
     parser.add_argument("--path", default='reliability_tdzdd/', type=str, help="path to the folder")
+    parser.add_argument("--mc_run", default=10000, type=int, help="number of Monte Carlo runs")
+    parser.add_argument("--mc_scenario", default=100, type=int, help="number of Monte Carlo scenarios")
+    parser.add_argument("--confidence", default=0.95, type=float, help="confidence level")
+    parser.add_argument("--comp_type", default=1, type=int, help="type of computation: 1-exact fbs, 2-estimation monte carlo, 3-exact enumeration")
     args = parser.parse_args()
     return args
-
-
 
 def create_graph(args):
 
@@ -66,24 +68,26 @@ def comp_process(dataset, args):
     #os.chdir(os.path.expanduser('~'))
     os.chdir(args.path)
     #results = []
-    with open ('../save_files/results_{}.csv'.format(args.n_node), 'w') as f:
-        
-        for i, t in zip(dataset, range(len(dataset))):
-            rel, time = reliability_comp_fbs(i, t, args.n_node)
-            #results.append()
+    if args.comp_type == 1:
+        with open ('../save_files/results_{}.csv'.format(args.n_node), 'w') as f:
+            for i, t in zip(dataset, range(len(dataset))):
+                rel, time = reliability_comp_fbs(i, t, args.n_node)
             f.write('{};{};{}\n'.format(nx.to_dict_of_dicts(i), rel, time))
+        f.close()
+    
+    elif args.comp_type == 2:
+        
+        rel_args = [(i, args, t, args.n_node) for i,t in zip(dataset, range(len(dataset)))]
+        with multiprocessing.Pool(processes=32) as pool:
+            results = pool.starmap(reliability_comp_mc, rel_args)
 
-    f.close()
-
-# def multi_process(dataset):
-#     args = [(i,t) for i,t in zip(dataset, range(len(dataset)))]
-
-#     with multiprocessing.Pool(processes=32) as pool:
-#         results = pool.starmap(reliability, args)
-#     return results
+        with open ('../save_files/mc/results_{}.csv'.format(args.n_node), 'w') as f:
+            for i, t in zip(dataset, range(len(dataset))):
+            #     rel, rel_std, rel_lower, rel_upper, time = reliability_comp_mc(i, args, t, args.n_node)
+                f.write('{};{};{};{};{};{}\n'.format(nx.to_dict_of_dicts(i), results[t][0],results[t][1], results[t][2], results[t][3], results[t][4]))
+        f.close()
 
 if __name__ == "__main__":
     args = get_args()
     dataset = create_graph(args)
-    #print(multi_process(dataset))
     comp_process(dataset, args)
